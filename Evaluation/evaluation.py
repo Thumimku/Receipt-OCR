@@ -5,8 +5,10 @@ def read_data_file(file_name):
 
     file_object = open(file_name, "r")
     data_string = file_object.read().replace("\n", " ")
+    data_string = data_string.replace("  ", " ")
     file_object.close()
     data_array = np.array(data_string.split(" "))
+    print(data_array)
     return data_array
 
 
