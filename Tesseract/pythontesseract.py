@@ -67,7 +67,7 @@ def detect_text_block_with_skew(file_name):
 #     or_image = cv2.bitwise_or(img, closing)
 #     return or_image
 
-save_path = "/home/thumilan/Desktop/FYP/Evaluation"
+save_path = "/home/chukku/PycharmProjects/Receipt-OCR/Evaluation"
 completeName = os.path.join(save_path, "output"+".txt")
 data_text = pytesseract.image_to_string(Image.open(set_image_dpi('test.png')), lang='fra')
 save_file(data_text,completeName)
