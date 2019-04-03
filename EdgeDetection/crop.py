@@ -5,33 +5,17 @@ import numpy as np
 import matplotlib
 
 
-img = cv2.imread('linesDetected.jpg')
+img = cv2.imread('linesDetectednew.jpg')
+(h, w) = img.shape[:2]
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray,250,300,apertureSize = 3)
-
-
-def rotateImage(image, angle):
-   (h, w) = image.shape[:2]
-   center = (w / 2, h / 2)
-   M = cv2.getRotationMatrix2D(center,angle,1.0)
-   rotated_image = cv2.warpAffine(image, M, (w,h))
-   return rotated_image
-
-
-
-# cv2.imshow('rotated',rotateImage(edges,2))
-# cv2.waitKey(0)
-
-
-
-# This returns an array of r and theta values
-lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
-
-skew_angle=np.array(lines.shape[0])
-
-
-
-
+edges = cv2.Canny(gray,100, 300, apertureSize = 3)
+lines = cv2.HoughLines(edges, 1, np.pi / 180, 170)
+xw=True
+wx=True
+yh=True
+hy=True
+lines_array=np.zeros(shape=(lines.shape[0], 6))
+iter=0
 for single_line in lines:
    for r, theta in single_line:
       # Stores the value of cos(theta) in a
@@ -61,14 +45,43 @@ for single_line in lines:
       # cv2.line draws a line in img from the point(x1,y1) to (x2,y2).
       # (0,0,255) denotes the colour of the line to be
       # drawn. In this case, it is red.
+      cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
-      # cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
-      print(x0 ,y0 ,x1,y1,x2,y2)
-# All the changes made in the input image are finally
-# written on a new image houghlines.jpg
+      lines_array[iter]=[x0, x1, x2, y0, y1, y2]
+      iter=iter+1
 
-# find contours / rectangle
-   # Select ROI
 
-cv2.imwrite('linesDetected_tested.jpg', img)
+
+
+
+
+print (lines_array)
+border=[0,0,0,0]
+
+for line in lines_array:
+   x0,x1,x2,y0,y1,y2=line[0],line[1],line[2],line[3],line[4],line[5]
+   if (abs(y1-y2)>abs(x1-x2)):
+      if((x0>w/2) and (xw)):
+         border[0]=int(x0)
+         xw=False
+
+
+      elif(wx) and (x0<=w/2):
+         border[1]=int(x0)
+         wx=False
+
+
+   else:
+      if((y0>h/2) and (yh)):
+         border[2]=int(y0)
+         yh=False
+
+      elif (hy) and (y0<=h/2):
+         border[3]=int(y0)
+         hy=False
+
+img=img[border[3]:border[2], border[1]:border[0]]
+# img=img[border[3]:h, 0:w]
+
+cv2.imwrite('linesDetected2_tested_new.jpg', img)

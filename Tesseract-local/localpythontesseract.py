@@ -30,8 +30,7 @@ def set_image_dpi(file_path):
 
 
 # rescale image to 300 dpi in CV2
-def rescale_image(file_path,image_save_path):
-    img = cv2.imread(file_path)
+def rescale_image(img,image_save_path):
     img = cv2.resize(img, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC)
     cv2.imwrite(image_save_path+"/test_rescaled.png",img)
     return img
@@ -40,7 +39,7 @@ def rescale_image(file_path,image_save_path):
 # noise removal thorugh cv2
 def noise_removal(img,image_save_path):
     # Convert to gray
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Apply dilation and erosion to remove some noise
     kernel = np.ones((1, 1), np.uint8)
@@ -69,11 +68,10 @@ def noise_removal_without_saving(img):
 # binarisation thorugh cv2
 def binarization(img,image_save_path):
     # Apply threshold to get image with only b&w (binarization)
-
-    th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, \
+    th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                cv2.THRESH_BINARY, 11, 2)
-    th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, \
-                               cv2.THRESH_BINARY, 11, 2)
+    # th3 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, \
+    #                            cv2.THRESH_BINARY, 11, 2)
     cv2.imwrite(image_save_path+"/test_binarized.png", th2)
 
     return th2
@@ -83,19 +81,18 @@ save_path = "/home/thumilan/Desktop/FYP/Evaluation"
 image_save_path = "/home/thumilan/Desktop/FYP/ProcessedImage"
 completeName = os.path.join(save_path, "output"+".txt")
 
-# data_text = pytesseract.image_to_string(Image.open(set_image_dpi('test2.png')), lang='fra')
 
-# img = cv2.imread('megamall.jpeg',0)
-# # cv2.imwrite(image_save_path+"/cargils.jpg", img)
-# cv2.imwrite('test2.png',img[0:500])
-# print((img[400][0:153]))
-# data_text = pytesseract.image_to_string((noise_removal(rescale_image('cargils.jpg', image_save_path), image_save_path)), lang='eng')
-#
-# save_file(data_text, completeName)
+img = cv2.imread('megamall2.jpg',0)
+# cv2.imwrite(image_save_path+"/cargils.jpg", img)
+data_text = pytesseract.image_to_string(rescale_image(noise_removal(cv2.imread('output.jpg',0), image_save_path),image_save_path))
+# data_text = pytesseract.image_to_string(Image.open(set_image_dpi('output.jpg')))
+
+print(data_text)
+save_file(data_text, completeName)
 
 # detect_text_block_with_skew('/home/thumilan/Desktop/FYP/Tesseract-French/cargils.jpg')
 
 
-img = cv2.imread('megamall.jpeg',0)
-# cv2.imwrite(image_save_path+"/cargils.jpg", img)
-print((img[400][0:153]))
+# img = cv2.imread('megamall.jpeg',0)
+# # cv2.imwrite(image_save_path+"/cargils.jpg", img)
+# print((img[400][0:153]))
