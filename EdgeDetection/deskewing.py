@@ -14,12 +14,12 @@ def rotateImage(image, angle):
    return rotated_image
 
 
-img = cv2.imread('megamall.jpeg')
+img = cv2.imread('meganew.jpg')
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray,250,300,apertureSize = 3)
+edges = cv2.Canny(gray,100,300,apertureSize = 3)
 
 # This returns an array of r and theta values
-lines = cv2.HoughLines(edges, 1, np.pi / 180, 250)
+lines = cv2.HoughLines(edges, 1, np.pi / 180, 170)
 
 skew_angle=np.array(lines.shape[0])
 
@@ -56,12 +56,13 @@ for r, theta in lines[0]:
    # cv2.line draws a line in img from the point(x1,y1) to (x2,y2).
    # (0,0,255) denotes the colour of the line to be
    # drawn. In this case, it is red.
-   # cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+   cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
 
    myradians = math.atan2(y1-y2, x1 - x2)
    mydegrees = math.degrees(myradians)
-   img=rotateImage(img, mydegrees)
-   img=rotateImage(img, -90)
+   if (mydegrees)<30:
+      img=rotateImage(img, mydegrees)
+   # img=rotateImage(img, -90)
 # All the changes made in the input image are finally
 # written on a new image houghlines.jpg
-cv2.imwrite('linesDetected.jpg', img)
+cv2.imwrite('linesDetectednew.jpg', img)
