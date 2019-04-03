@@ -24,9 +24,9 @@ def main(image_file):
     response = client.text_detection(image=image)
     labels = response.text_annotations
 
-    for label in labels:
-        print(label.description)
-        save_file(label.description, completeName)
+   # for label in labels:
+    #    print(label.description)
+    save_file(labels[0].description, completeName)
 
     print(format(labels[0].description))
 
@@ -51,5 +51,5 @@ def save_file(data_text,file_name):
     file_object.close()
 
 save_path = "/home/chukku/PycharmProjects/Receipt-OCR/Evaluation"
-completeName = os.path.join(save_path, "outputG"+".txt")
-main('test.png')
+completeName = os.path.join(save_path, "outputMega"+".txt")
+main('meganew.jpg')
